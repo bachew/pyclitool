@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+CLI_MODULE="yourapp"
+
+if [ "$PYCLITOOL_INITIALIZED" = "1" ]; then
+    python -m "$CLI_MODULE" "$@"
+else
+    BASE_DIR=$(dirname $(dirname "$0"))
+    "$BASE_DIR/pyclitool/bootstrap" python -m "$CLI_MODULE" "$@"
+fi

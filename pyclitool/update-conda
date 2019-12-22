@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -ex
+
+# Python packages containing binaries (especially platform specific) best to be
+# installed here
+
+# conda install -yc conda-forge --file <(echo "
+# ipython>=7.10.2
+#")

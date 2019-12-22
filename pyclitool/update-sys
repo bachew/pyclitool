@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -ex
+
+if ! command -v curl; then
+    sudo apt install curl
+fi

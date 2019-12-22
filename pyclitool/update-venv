@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -ex
+
+# These should be upgraded regularly, just the update number: 1
+pip install -U pip setuptools wheel
+
+# Pip requirements here, not using separate requirements.txt so that
+# bootstrap script can detect and apply changes easily
+pip install -r <(echo "
+click>=7.0
+")

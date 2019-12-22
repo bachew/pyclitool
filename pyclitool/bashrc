@@ -1,0 +1,2 @@
+. ~/.bashrc
+PS1="$PYCLITOOL_VENV_PROMPT$PS1"
