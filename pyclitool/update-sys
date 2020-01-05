@@ -1,7 +1,24 @@
 #!/bin/bash
 
-set -ex
+set -e
 
-if ! command -v curl; then
-    sudo apt install curl
-fi
+main() {
+    check curl
+}
+
+# check(command, package=None)
+check() {
+    if command -v "$1" > /dev/null; then
+        return
+    fi
+
+    local PACKAGE="$2"
+
+    if [ -z "$PACKAGE" ]; then
+        PACKAGE="$1"
+    fi
+    echo "Installing $PACKAGE"
+    sudo apt install "$PACKAGE"
+}
+
+main "$@"

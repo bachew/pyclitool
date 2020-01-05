@@ -37,7 +37,6 @@ main() {
             MINICONDA_UPDATED="1"
         fi
     else
-        echo "Miniconda is not installed"
         install_miniconda
         MINICONDA_UPDATED="1"
     fi

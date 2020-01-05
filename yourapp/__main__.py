@@ -1,5 +1,6 @@
 from os import path as osp
 import click
+import os
 import subprocess
 import yourapp
 
@@ -19,46 +20,46 @@ def cli_bash():
     '''
     base_dir = osp.dirname(osp.dirname(yourapp.__file__))
     rcfile = osp.join(base_dir, 'pyclitool/bashrc')
+    os.stat(rcfile)  # ensure file exists
     cmd = [
         'bash',
         '--rcfile', rcfile,
         '-i',  # interactive
     ]
-    status = subprocess.call(cmd)
-    raise SystemExit(status)
+    res = subprocess.run(cmd, check=False)
+    raise SystemExit(res.returncode)
 
 
 @cli.command('run', context_settings=dict(
+    help_option_names=[],
     ignore_unknown_options=True,
 ))
 @click.pass_context
-@click.argument('command', nargs=-1, type=click.UNPROCESSED)
+@click.argument('command', nargs=-1, type=click.UNPROCESSED,
+                metavar='PROGRAM [ARGS]...')
 def cli_run(ctx, command):
     '''
     Run a command in virtual environment.
     '''
+
+    def help_exit():
+        print(ctx.get_help())
+        raise SystemExit(1)
+
     if not command:
-        raise click.ClickException('Commnot not provided')
+        help_exit()
+
+    venv_prompt = os.environ.get('PYCLITOOL_VENV_PROMPT') or ''
+    command_echo = '{}$ {}'.format(venv_prompt, subprocess.list2cmdline(command))
+    print(command_echo)
 
     try:
-        status = subprocess.call(command)
+        res = subprocess.run(command, check=False)
     except FileNotFoundError:
-        raise click.ClickException('Command not found: {}'.format(command[0]))
+        click.echo('Error: command not found: {}'.format(command[0]), err=True)
+        help_exit()
     else:
-        raise SystemExit(status)
-
-
-@cli.command('python', context_settings=dict(
-    ignore_unknown_options=True,
-))
-@click.pass_context
-@click.argument('args', nargs=-1, type=click.UNPROCESSED)
-def cli_python(ctx, args):
-    '''
-    Run python in virtual environment.
-    '''
-    status = subprocess.call(['python'] + list(args))
-    raise SystemExit(status)
+        raise SystemExit(res.returncode)
 
 
 cli(prog_name='yapp')
