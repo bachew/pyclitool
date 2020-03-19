@@ -2,7 +2,7 @@
 
 set -e
 
-CLI_MODULE="yourapp"
+CLI_MODULE="app"
 
 if [ "$PYCLITOOL_INITIALIZED" = "1" ]; then
     python -m "$CLI_MODULE" "$@"

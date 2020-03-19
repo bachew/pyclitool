@@ -2,7 +2,6 @@ from os import path as osp
 import click
 import os
 import subprocess
-import yourapp
 
 
 @click.group('')
@@ -18,7 +17,7 @@ def cli_bash():
     '''
     Spawn bash shell in virtual environment.
     '''
-    base_dir = osp.dirname(osp.dirname(yourapp.__file__))
+    base_dir = osp.dirname(osp.dirname(__file__))
     rcfile = osp.join(base_dir, 'pyclitool/bashrc')
     os.stat(rcfile)  # ensure file exists
     cmd = [
